@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	body {
+		margin: 0;
+	}
+
+	canvas {
+		width: 100%;
+		height: 100%
+	}
+	</style>
+</head>
+
+<body>
+	<script src="js/libs/three.js/three.min.js"></script>
+	<script src="js/libs/three.js/controls/TransformControls.js"></script>
+	<script src="js/libs/three.js/controls/TrackballControls.js"></script>
+	<script src="js/collision.js"></script>
+	<script>
+	// create scene
+	var scene = new THREE.Scene();
+	var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+	var renderer = new THREE.WebGLRenderer();
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	document.body.appendChild(renderer.domElement);
+
+	// camera
+	camera.position.set( 5, 5, 5 );
+	camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
+
+	// grid
+	scene.add( new THREE.GridHelper( 100, 100 ) );
+
+	var world = new World( camera, renderer.domElement );
+
+	// add cube
+	var cube1 = world.newItem( new THREE.BoxGeometry(1, 1, 1) );
+	scene.add(cube1);
+
+	var cube2 = world.newItem( new THREE.BoxGeometry(1, 1, 1) );
+	cube2.position.y = 3
+	scene.add(cube2);
+
+	// control
+	control = world.controls;
+	control.addEventListener( 'change', render );
+	control.bind( scene );
+
+	// render
+	function animate() {
+		requestAnimationFrame(animate);
+		control.update();
+		render();
+	}
+	animate();
+
+	function render() {
+		renderer.render( scene, camera );
+	}
+	</script>
+</body>
+
+</html>
